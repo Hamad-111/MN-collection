@@ -1,6 +1,6 @@
 export default function About() {
   return (
-    <section id="about" className="py-16 md:py-24 bg-gradient-to-br from-accent/5 via-background to-secondary/5">
+    <section id="about" className="py-16 md:py-24 bg-gradient-to-br from-accent/5 via-background to-secondary/5 scroll-mt-28">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left - Image Placeholder Frame */}

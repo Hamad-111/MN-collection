@@ -58,8 +58,9 @@ export default function CategoryShowcase() {
 
   return (
     <section
+      id="collections"
       ref={ref}
-      className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-background via-accent/5 to-background"
+      className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-background via-accent/5 to-background scroll-mt-28"
     >
       <div className="max-w-7xl mx-auto">
         <motion.div

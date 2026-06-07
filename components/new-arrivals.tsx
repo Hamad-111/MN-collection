@@ -28,14 +28,14 @@ const newArrivals = [
 
 export default function NewArrivals() {
   return (
-    <section id="new-arrivals" className="py-16 md:py-24 bg-gradient-to-b from-background via-primary/5 to-background">
+    <section id="new-arrivals" className="py-20 bg-gradient-to-b from-background via-accent/5 to-background border-t border-border/30 scroll-mt-28">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-12 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">
+          <h2 className="text-4xl md:text-5xl font-bold font-serif text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-primary mb-4">
             New Arrivals
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-lg text-muted-foreground font-sans max-w-2xl mx-auto">
             Luxury Modest Fashion Articles
           </p>
         </div>

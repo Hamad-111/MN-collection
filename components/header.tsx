@@ -2,11 +2,12 @@
 
 import Link from 'next/link'
 import { ShoppingCart, Search, Menu, X } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [activeSection, setActiveSection] = useState('')
 
   const navItems = [
     { label: 'Collections', href: '#collections' },
@@ -14,6 +15,35 @@ export default function Header() {
     { label: 'Shop', href: '#shop' },
     { label: 'About', href: '#about' },
   ]
+
+  useEffect(() => {
+    const observerOptions = {
+      root: null,
+      rootMargin: '-30% 0px -50% 0px', // trigger when section is in middle of viewport
+      threshold: 0,
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id)
+        }
+      })
+    }, observerOptions)
+
+    const sections = ['collections', 'new-arrivals', 'shop', 'about']
+    sections.forEach((id) => {
+      const el = document.getElementById(id)
+      if (el) observer.observe(el)
+    })
+
+    return () => {
+      sections.forEach((id) => {
+        const el = document.getElementById(id)
+        if (el) observer.unobserve(el)
+      })
+    }
+  }, [])
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/40">
@@ -39,20 +69,27 @@ export default function Header() {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex gap-8">
-            {navItems.map((item) => (
-              <motion.div
-                key={item.href}
-                whileHover={{ y: -1 }}
-              >
-                <Link
-                  href={item.href}
-                  className="text-foreground/80 hover:text-primary transition relative group text-sm font-medium tracking-wider uppercase"
+            {navItems.map((item) => {
+              const isActive = activeSection === item.href.substring(1)
+              return (
+                <motion.div
+                  key={item.href}
+                  whileHover={{ y: -1 }}
                 >
-                  {item.label}
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-primary to-secondary group-hover:w-full transition-all duration-300" />
-                </Link>
-              </motion.div>
-            ))}
+                  <Link
+                    href={item.href}
+                    className={`transition relative group text-sm font-medium tracking-wider uppercase ${
+                      isActive ? 'text-primary font-semibold' : 'text-foreground/80 hover:text-primary'
+                    }`}
+                  >
+                    {item.label}
+                    <span className={`absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-primary to-secondary transition-all duration-300 ${
+                      isActive ? 'w-full' : 'w-0 group-hover:w-full'
+                    }`} />
+                  </Link>
+                </motion.div>
+              )
+            })}
           </nav>
 
           {/* Right Icons */}
@@ -95,15 +132,21 @@ export default function Header() {
             exit={{ opacity: 0, y: -10 }}
             className="md:hidden mt-4 pt-4 border-t border-border/40 flex flex-col gap-3"
           >
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="text-foreground/80 hover:text-primary transition py-2 hover:pl-2 duration-200 text-sm font-medium uppercase tracking-wider"
-              >
-                {item.label}
-              </Link>
-            ))}
+            {navItems.map((item) => {
+              const isActive = activeSection === item.href.substring(1)
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setIsMenuOpen(false)}
+                  className={`transition py-2 hover:pl-2 duration-200 text-sm font-medium uppercase tracking-wider ${
+                    isActive ? 'text-primary font-semibold pl-2' : 'text-foreground/80 hover:text-primary'
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              )
+            })}
           </motion.nav>
         )}
       </div>

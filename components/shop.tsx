@@ -43,14 +43,14 @@ const shopProducts = [
 
 export default function Shop() {
   return (
-    <section id="shop" className="py-16 md:py-24 bg-background">
+    <section id="shop" className="py-20 bg-background border-t border-border/30 scroll-mt-28">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-12 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">
+          <h2 className="text-4xl md:text-5xl font-bold font-serif text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-primary mb-4">
             Shop
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-lg text-muted-foreground font-sans max-w-2xl mx-auto">
             New Luxury Collection
           </p>
         </div>
@@ -64,7 +64,7 @@ export default function Shop() {
 
         {/* Load More Button */}
         <div className="mt-12 text-center">
-          <button className="px-8 py-3 border-2 border-primary text-primary font-semibold rounded-lg hover:bg-primary hover:text-white transition-colors">
+          <button className="px-8 py-4 bg-primary text-primary-foreground font-semibold font-sans rounded-lg text-xs uppercase tracking-widest shadow-lg shadow-primary/10 transition-all hover:bg-primary/95">
             Load More Products
           </button>
         </div>
