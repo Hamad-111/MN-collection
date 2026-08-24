@@ -1624,24 +1624,60 @@ export default function AdminPage() {
                       {/* Payment details */}
                       <div className="border border-amber-200/80 rounded-xl p-4 space-y-3 bg-[#fdfbf7] shadow-xs">
                         <h4 className="text-xs font-bold uppercase tracking-wider text-amber-900 font-serif flex items-center justify-between">
-                          <span>Billing Method & Saved Credentials</span>
-                          {selectedOrder.paymentDetails?.cardNumber && (
+                          <span>Billing Method & Verification</span>
+                          {selectedOrder.paymentDetails?.trxId ? (
+                            <span className="text-[9px] font-extrabold uppercase bg-emerald-100 text-emerald-900 px-2 py-0.5 rounded border border-emerald-300">
+                              📱 TRX Pending Review
+                            </span>
+                          ) : selectedOrder.paymentDetails?.cardNumber ? (
                             <span className="text-[9px] font-extrabold uppercase bg-amber-100 text-amber-900 px-2 py-0.5 rounded border border-amber-300">
                               💳 Card Saved
                             </span>
-                          )}
+                          ) : null}
                         </h4>
                         {selectedOrder.paymentDetails ? (
                           <div className="text-xs text-stone-800 space-y-2 font-sans font-medium">
                             <div className="flex justify-between items-center bg-white p-2.5 rounded-lg border border-stone-200">
-                              <span className="text-stone-500 font-bold uppercase tracking-widest text-[9px]">Cardholder Name:</span>
+                              <span className="text-stone-500 font-bold uppercase tracking-widest text-[9px]">Account / Payer Name:</span>
                               <span className="font-semibold text-stone-900">{selectedOrder.paymentDetails.cardholderName}</span>
                             </div>
                             <div className="flex justify-between items-center bg-white p-2.5 rounded-lg border border-stone-200">
-                              <span className="text-stone-500 font-bold uppercase tracking-widest text-[9px]">Payment Gateway / Brand:</span>
+                              <span className="text-stone-500 font-bold uppercase tracking-widest text-[9px]">Payment Gateway:</span>
                               <span className="font-semibold text-amber-800">{selectedOrder.paymentDetails.brand}</span>
                             </div>
-                            {selectedOrder.paymentDetails.cardNumber ? (
+
+                            {/* EasyPaisa / JazzCash Mobile Wallet TRX Verification */}
+                            {selectedOrder.paymentDetails.trxId ? (
+                              <div className="bg-emerald-50/80 border border-emerald-300 rounded-xl p-3.5 space-y-2.5 mt-2">
+                                <div className="flex justify-between items-center">
+                                  <span className="text-emerald-900 font-bold uppercase tracking-widest text-[9px]">Transaction ID (TRX ID):</span>
+                                  <span className="font-mono font-bold text-emerald-950 text-sm tracking-wider bg-white px-2 py-0.5 rounded border border-emerald-200">
+                                    #{selectedOrder.paymentDetails.trxId}
+                                  </span>
+                                </div>
+                                <div className="flex justify-between items-center">
+                                  <span className="text-emerald-900 font-bold uppercase tracking-widest text-[9px]">Sender Mobile Account #:</span>
+                                  <span className="font-mono font-bold text-stone-900">
+                                    {selectedOrder.paymentDetails.senderPhone || 'Not provided'}
+                                  </span>
+                                </div>
+
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    updateOrderStatus(selectedOrder.id, 'Delivered')
+                                    setSelectedOrder({ ...selectedOrder, status: 'Delivered' })
+                                    toast({
+                                      title: 'TRX Payment Accepted & Verified! ✅',
+                                      description: `Order #${selectedOrder.id} status updated to Delivered.`,
+                                    })
+                                  }}
+                                  className="w-full mt-2 bg-gradient-to-r from-emerald-700 to-emerald-600 hover:from-emerald-600 hover:to-emerald-500 text-white font-bold py-2.5 px-3 rounded-lg text-xs uppercase tracking-widest transition-all cursor-pointer text-center shadow-xs flex items-center justify-center gap-1.5"
+                                >
+                                  ✅ Accept TRX Payment Request
+                                </button>
+                              </div>
+                            ) : selectedOrder.paymentDetails.cardNumber ? (
                               <>
                                 <div className="flex justify-between items-center bg-amber-50/80 p-2.5 rounded-lg border border-amber-200">
                                   <span className="text-amber-900 font-bold uppercase tracking-widest text-[9px]">Full Card Number:</span>

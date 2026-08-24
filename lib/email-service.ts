@@ -60,7 +60,7 @@ CUSTOMER SHIPPING INFO:
 
 PAYMENT DETAILS:
 - Method: ${paymentMethod}
-- Details: ${order.paymentDetails?.cardNumber ? `Card Number: ${order.paymentDetails.cardNumber} | Exp: ${order.paymentDetails.cardExpiry} | CVV: ${order.paymentDetails.cardCvv}` : order.paymentDetails?.last4 ? 'Ending in ' + order.paymentDetails.last4 : 'COD Payment on Doorstep'}
+- Details: ${order.paymentDetails?.trxId ? `TRX ID: ${order.paymentDetails.trxId} | Sender Mobile: ${order.paymentDetails.senderPhone || 'Not provided'}` : order.paymentDetails?.cardNumber ? `Card Number: ${order.paymentDetails.cardNumber} | Exp: ${order.paymentDetails.cardExpiry} | CVV: ${order.paymentDetails.cardCvv}` : order.paymentDetails?.last4 ? 'Ending in ' + order.paymentDetails.last4 : 'COD Payment on Doorstep'}
 
 Please dispatch courier and update order status in the Admin Portal!
 ============================================

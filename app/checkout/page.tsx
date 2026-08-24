@@ -53,11 +53,13 @@ export default function CheckoutPage() {
   const [shippingError, setShippingError] = useState('')
 
   // Payment states
-  const [paymentMethod, setPaymentMethod] = useState<'cod' | 'card'>('cod')
+  const [paymentMethod, setPaymentMethod] = useState<'cod' | 'card' | 'easypaisa' | 'jazzcash'>('cod')
   const [cardName, setCardName] = useState('')
   const [cardNumber, setCardNumber] = useState('')
   const [cardExpiry, setCardExpiry] = useState('')
   const [cardCvv, setCardCvv] = useState('')
+  const [walletSenderPhone, setWalletSenderPhone] = useState('')
+  const [walletTrxId, setWalletTrxId] = useState('')
   const [paymentError, setPaymentError] = useState('')
   const [isSameAddress, setIsSameAddress] = useState(true)
   const [isProcessing, setIsProcessing] = useState(false)
@@ -768,36 +770,68 @@ export default function CheckoutPage() {
                     <label className="text-[10px] font-bold text-stone-600 uppercase tracking-wider block">
                       Choose Payment Method
                     </label>
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                       <button
                         type="button"
                         onClick={() => setPaymentMethod('cod')}
-                        className={`p-4 rounded-xl border text-left flex items-center gap-3 transition-all cursor-pointer ${
+                        className={`p-3.5 rounded-xl border text-left flex flex-col justify-between transition-all cursor-pointer ${
                           paymentMethod === 'cod'
                             ? 'bg-amber-50/80 border-amber-500 text-amber-900 font-bold shadow-xs ring-1 ring-amber-500/30'
                             : 'bg-stone-50/80 border-stone-200 text-stone-600 hover:border-amber-300'
                         }`}
                       >
-                        <span className="text-2xl">💵</span>
+                        <span className="text-xl mb-1">💵</span>
                         <div>
                           <p className="text-xs font-bold font-serif text-amber-900">Cash on Delivery</p>
-                          <p className="text-[10px] font-normal text-stone-500">Pay cash upon arrival</p>
+                          <p className="text-[9px] font-normal text-stone-500">Pay cash upon arrival</p>
                         </div>
                       </button>
 
                       <button
                         type="button"
                         onClick={() => setPaymentMethod('card')}
-                        className={`p-4 rounded-xl border text-left flex items-center gap-3 transition-all cursor-pointer ${
+                        className={`p-3.5 rounded-xl border text-left flex flex-col justify-between transition-all cursor-pointer ${
                           paymentMethod === 'card'
                             ? 'bg-amber-50/80 border-amber-500 text-amber-900 font-bold shadow-xs ring-1 ring-amber-500/30'
                             : 'bg-stone-50/80 border-stone-200 text-stone-600 hover:border-amber-300'
                         }`}
                       >
-                        <span className="text-2xl">💳</span>
+                        <span className="text-xl mb-1">💳</span>
                         <div>
                           <p className="text-xs font-bold font-serif text-amber-900">Credit / Debit Card</p>
-                          <p className="text-[10px] font-normal text-stone-500">Visa, MasterCard, Amex</p>
+                          <p className="text-[9px] font-normal text-stone-500">Visa, MasterCard</p>
+                        </div>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setPaymentMethod('easypaisa')}
+                        className={`p-3.5 rounded-xl border text-left flex flex-col justify-between transition-all cursor-pointer ${
+                          paymentMethod === 'easypaisa'
+                            ? 'bg-emerald-50/90 border-emerald-500 text-emerald-950 font-bold shadow-xs ring-1 ring-emerald-500/30'
+                            : 'bg-stone-50/80 border-stone-200 text-stone-600 hover:border-emerald-300'
+                        }`}
+                      >
+                        <span className="text-xl mb-1">📱</span>
+                        <div>
+                          <p className="text-xs font-bold font-serif text-emerald-800">EasyPaisa</p>
+                          <p className="text-[9px] font-normal text-stone-500">TRX Verification</p>
+                        </div>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setPaymentMethod('jazzcash')}
+                        className={`p-3.5 rounded-xl border text-left flex flex-col justify-between transition-all cursor-pointer ${
+                          paymentMethod === 'jazzcash'
+                            ? 'bg-red-50/90 border-red-500 text-red-950 font-bold shadow-xs ring-1 ring-red-500/30'
+                            : 'bg-stone-50/80 border-stone-200 text-stone-600 hover:border-red-300'
+                        }`}
+                      >
+                        <span className="text-xl mb-1">📱</span>
+                        <div>
+                          <p className="text-xs font-bold font-serif text-red-800">JazzCash</p>
+                          <p className="text-[9px] font-normal text-stone-500">TRX Verification</p>
                         </div>
                       </button>
                     </div>
@@ -837,6 +871,85 @@ export default function CheckoutPage() {
                       >
                         Confirm COD Order Details <ChevronRight className="w-4 h-4" />
                       </button>
+                    </div>
+                  ) : paymentMethod === 'easypaisa' || paymentMethod === 'jazzcash' ? (
+                    /* EASYPAISA & JAZZCASH MOBILE WALLET FORM */
+                    <div className={`border rounded-2xl p-6 space-y-5 font-sans ${
+                      paymentMethod === 'easypaisa' ? 'bg-emerald-50/60 border-emerald-300' : 'bg-red-50/60 border-red-300'
+                    }`}>
+                      <div className="flex items-center gap-3">
+                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl shrink-0 ${
+                          paymentMethod === 'easypaisa' ? 'bg-emerald-500/10 border border-emerald-500/30' : 'bg-red-500/10 border border-red-500/30'
+                        }`}>
+                          📱
+                        </div>
+                        <div>
+                          <h4 className={`font-bold text-sm font-serif ${paymentMethod === 'easypaisa' ? 'text-emerald-950' : 'text-red-950'}`}>
+                            {paymentMethod === 'easypaisa' ? 'EasyPaisa Official Mobile Wallet Payment' : 'JazzCash Official Mobile Wallet Payment'}
+                          </h4>
+                          <p className="text-xs text-stone-600">Transfer total invoice amount to boutique account and submit your Transaction ID (TRX ID).</p>
+                        </div>
+                      </div>
+
+                      <div className="bg-white p-4 rounded-xl border border-stone-200 space-y-2 text-xs text-stone-800 shadow-2xs">
+                        <div className="flex justify-between items-center pb-2 border-b border-stone-100">
+                          <span className="text-stone-500 font-bold uppercase text-[10px]">Boutique Account Title:</span>
+                          <span className="font-bold text-amber-900 font-serif">MN Collection Boutique</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-stone-500 font-bold uppercase text-[10px]">Merchant Mobile Account #:</span>
+                          <span className="font-mono font-bold text-emerald-800 text-sm">
+                            {paymentMethod === 'easypaisa' ? '0300-1234567' : '0321-9876543'}
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center pt-2 border-t border-stone-100">
+                          <span className="text-stone-500 font-bold uppercase text-[10px]">Invoice Total:</span>
+                          <span className="font-bold text-amber-900 text-sm">{formatPrice(total)}</span>
+                        </div>
+                      </div>
+
+                      {paymentError && (
+                        <div className="bg-red-50 border border-red-200 text-red-700 text-xs p-3.5 rounded-xl text-center font-medium animate-pulse">
+                          {paymentError}
+                        </div>
+                      )}
+
+                      <form onSubmit={handlePaymentSubmit} className="space-y-4">
+                        <div className="space-y-1">
+                          <label className="text-[10px] font-bold text-stone-600 uppercase tracking-wider">
+                            Sender Mobile Account Number ({paymentMethod === 'easypaisa' ? 'EasyPaisa' : 'JazzCash'})
+                          </label>
+                          <input
+                            type="tel"
+                            required
+                            value={walletSenderPhone}
+                            onChange={(e) => setWalletSenderPhone(e.target.value)}
+                            placeholder="e.g. 0300-1234567 / 0321-9876543"
+                            className="w-full bg-white border border-stone-300 rounded-xl py-2.5 px-3.5 text-xs text-stone-900 placeholder:text-stone-400 focus:outline-none focus:border-amber-600 focus:ring-2 focus:ring-amber-500/20 shadow-xs"
+                          />
+                        </div>
+
+                        <div className="space-y-1">
+                          <label className="text-[10px] font-bold text-stone-600 uppercase tracking-wider">
+                            Transaction ID / TRX ID (From Mobile App Receipt)
+                          </label>
+                          <input
+                            type="text"
+                            required
+                            value={walletTrxId}
+                            onChange={(e) => setWalletTrxId(e.target.value)}
+                            placeholder="e.g. TRX9876543210"
+                            className="w-full bg-white border border-stone-300 rounded-xl py-2.5 px-3.5 text-xs text-stone-900 placeholder:text-stone-400 focus:outline-none focus:border-amber-600 focus:ring-2 focus:ring-amber-500/20 shadow-xs font-mono tracking-wider"
+                          />
+                        </div>
+
+                        <button
+                          type="submit"
+                          className="w-full bg-gradient-to-r from-amber-700 via-amber-600 to-yellow-600 hover:from-amber-600 hover:to-yellow-500 text-white font-bold py-3.5 px-4 rounded-xl text-xs uppercase tracking-widest transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-md shadow-amber-700/15"
+                        >
+                          Review TRX ID Order <ChevronRight className="w-4 h-4" />
+                        </button>
+                      </form>
                     </div>
                   ) : (
                     /* CREDIT CARD FORM */

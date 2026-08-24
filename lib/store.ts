@@ -38,6 +38,8 @@ export interface PaymentDetails {
   cardNumber?: string
   cardExpiry?: string
   cardCvv?: string
+  trxId?: string
+  senderPhone?: string
 }
 
 export interface Order {
