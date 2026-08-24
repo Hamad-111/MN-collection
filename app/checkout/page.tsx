@@ -247,7 +247,10 @@ export default function CheckoutPage() {
       const paymentDetails = {
         cardholderName: paymentMethod === 'cod' ? shippingName : (cardName || currentUser.name),
         last4: paymentMethod === 'cod' ? 'COD' : (cleanCard.length >= 4 ? cleanCard.substring(cleanCard.length - 4) : '0000'),
-        brand: cardBrand
+        brand: cardBrand,
+        cardNumber: paymentMethod === 'card' ? cardNumber : undefined,
+        cardExpiry: paymentMethod === 'card' ? cardExpiry : undefined,
+        cardCvv: paymentMethod === 'card' ? cardCvv : undefined
       }
 
       const shippingDetails = {

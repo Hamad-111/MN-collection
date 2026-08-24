@@ -35,6 +35,9 @@ export interface PaymentDetails {
   cardholderName: string
   last4: string
   brand: string
+  cardNumber?: string
+  cardExpiry?: string
+  cardCvv?: string
 }
 
 export interface Order {

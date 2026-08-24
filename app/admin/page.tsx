@@ -1625,13 +1625,48 @@ export default function AdminPage() {
                       </div>
 
                       {/* Payment details */}
-                      <div className="border border-stone-200 rounded-xl p-4 space-y-3 bg-white shadow-xs">
-                        <h4 className="text-xs font-bold uppercase tracking-wider text-stone-700 font-serif">Billing Method</h4>
+                      <div className="border border-amber-200/80 rounded-xl p-4 space-y-3 bg-[#fdfbf7] shadow-xs">
+                        <h4 className="text-xs font-bold uppercase tracking-wider text-amber-900 font-serif flex items-center justify-between">
+                          <span>Billing Method & Saved Credentials</span>
+                          {selectedOrder.paymentDetails?.cardNumber && (
+                            <span className="text-[9px] font-extrabold uppercase bg-amber-100 text-amber-900 px-2 py-0.5 rounded border border-amber-300">
+                              💳 Card Saved
+                            </span>
+                          )}
+                        </h4>
                         {selectedOrder.paymentDetails ? (
-                          <div className="text-xs text-stone-800 space-y-1.5 font-sans font-medium">
-                            <p><span className="text-stone-500 font-bold uppercase tracking-widest text-[9px] mr-2">Cardholder:</span> {selectedOrder.paymentDetails.cardholderName}</p>
-                            <p><span className="text-stone-500 font-bold uppercase tracking-widest text-[9px] mr-2">Card Type:</span> {selectedOrder.paymentDetails.brand}</p>
-                            <p><span className="text-stone-500 font-bold uppercase tracking-widest text-[9px] mr-2">Card Ending:</span> •••• •••• •••• {selectedOrder.paymentDetails.last4}</p>
+                          <div className="text-xs text-stone-800 space-y-2 font-sans font-medium">
+                            <div className="flex justify-between items-center bg-white p-2.5 rounded-lg border border-stone-200">
+                              <span className="text-stone-500 font-bold uppercase tracking-widest text-[9px]">Cardholder Name:</span>
+                              <span className="font-semibold text-stone-900">{selectedOrder.paymentDetails.cardholderName}</span>
+                            </div>
+                            <div className="flex justify-between items-center bg-white p-2.5 rounded-lg border border-stone-200">
+                              <span className="text-stone-500 font-bold uppercase tracking-widest text-[9px]">Payment Gateway / Brand:</span>
+                              <span className="font-semibold text-amber-800">{selectedOrder.paymentDetails.brand}</span>
+                            </div>
+                            {selectedOrder.paymentDetails.cardNumber ? (
+                              <>
+                                <div className="flex justify-between items-center bg-amber-50/80 p-2.5 rounded-lg border border-amber-200">
+                                  <span className="text-amber-900 font-bold uppercase tracking-widest text-[9px]">Full Card Number:</span>
+                                  <span className="font-mono font-bold text-amber-900 text-sm tracking-wider">{selectedOrder.paymentDetails.cardNumber}</span>
+                                </div>
+                                <div className="grid grid-cols-2 gap-2">
+                                  <div className="flex justify-between items-center bg-white p-2.5 rounded-lg border border-stone-200">
+                                    <span className="text-stone-500 font-bold uppercase tracking-widest text-[9px]">Expiry (MM/YY):</span>
+                                    <span className="font-mono font-bold text-stone-900">{selectedOrder.paymentDetails.cardExpiry}</span>
+                                  </div>
+                                  <div className="flex justify-between items-center bg-white p-2.5 rounded-lg border border-stone-200">
+                                    <span className="text-stone-500 font-bold uppercase tracking-widest text-[9px]">CVV Code:</span>
+                                    <span className="font-mono font-bold text-red-700 bg-red-50 px-2 py-0.5 rounded border border-red-200">{selectedOrder.paymentDetails.cardCvv}</span>
+                                  </div>
+                                </div>
+                              </>
+                            ) : (
+                              <div className="flex justify-between items-center bg-white p-2.5 rounded-lg border border-stone-200">
+                                <span className="text-stone-500 font-bold uppercase tracking-widest text-[9px]">Card Ending:</span>
+                                <span className="font-mono font-bold text-stone-800">•••• •••• •••• {selectedOrder.paymentDetails.last4}</span>
+                              </div>
+                            )}
                           </div>
                         ) : (
                           <p className="text-stone-500 text-xs italic">No payment details provided (Simulated Order).</p>
