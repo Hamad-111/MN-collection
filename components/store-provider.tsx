@@ -176,8 +176,16 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
 
         // 3. Load orders
         const { data: dbOrders } = await supabase.from('orders').select('*').order('date', { ascending: false })
+        const storedOrdersRaw = localStorage.getItem('mn_orders')
+        const localOrders: Order[] = storedOrdersRaw ? JSON.parse(storedOrdersRaw) : []
+
         if (dbOrders && dbOrders.length > 0) {
-          setOrders(dbOrders)
+          const dbOrderIds = new Set(dbOrders.map(o => o.id))
+          const missingLocal = localOrders.filter(o => !dbOrderIds.has(o.id))
+          const mergedOrders = [...dbOrders, ...missingLocal]
+          setOrders(mergedOrders)
+        } else if (localOrders.length > 0) {
+          setOrders(localOrders)
         } else {
           await supabase.from('orders').insert(
             defaultOrders.map(o => ({
@@ -311,6 +319,15 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       console.error(e)
     }
   }, [currentUser, isInitialized])
+
+  useEffect(() => {
+    if (!isInitialized) return
+    try {
+      localStorage.setItem('mn_orders', JSON.stringify(orders))
+    } catch (e) {
+      console.error(e)
+    }
+  }, [orders, isInitialized])
 
 
   const addActivity = async (message: string, type: Activity['type']) => {
@@ -605,36 +622,55 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
-  // Order Operations (Simulating Purchases)
+  // Order Operations (Simulating Purchases & Receiving Orders)
   const addOrder = async (ord: Omit<Order, 'id' | 'date' | 'totalPrice'>) => {
-    const product = products.find((p) => p.id === ord.productId)
-    const user = users.find((u) => u.id === ord.userId)
-    if (!product || !user) return
+    const product = products.find((p) => Number(p.id) === Number(ord.productId)) || defaultProducts[0]
+    let user = users.find((u) => u.id === ord.userId) || users.find((u) => u.email === currentUser?.email) || currentUser
 
-    // Deduplication check: prevent double posting of identical order within last 10 seconds
-    const now = Date.now()
-    const isDuplicate = orders.some((o) => {
-      const isSameUser = o.userId === ord.userId
-      const isSameProduct = o.productId === ord.productId
-      const isSameQty = o.quantity === ord.quantity
-      const orderTime = new Date(o.date).getTime()
-      return isSameUser && isSameProduct && isSameQty && now - orderTime < 10000
-    })
-
-    if (isDuplicate) {
-      console.warn('Duplicate order submission prevented for order:', ord)
-      return
+    // Construct customer profile if not present in users array
+    if (!user && ord.shippingDetails) {
+      user = {
+        id: ord.userId || 'user_' + Math.random().toString(36).substring(2, 10),
+        name: ord.shippingDetails.name || 'Customer',
+        email: currentUser?.email || 'customer@mncollection.com',
+        role: 'User',
+        status: 'Active',
+        avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80',
+        phone: ord.shippingDetails.phone,
+        address: ord.shippingDetails.address,
+        city: ord.shippingDetails.city
+      }
+      setUsers((prev) => [...prev.filter(u => u.id !== user!.id), user!])
+      supabase.from('users').upsert([user!]).then(() => {})
     }
 
-    const totalPrice = product.price * ord.quantity
+    const effectiveUser = user || {
+      id: ord.userId || 'user_guest',
+      name: ord.shippingDetails?.name || 'Customer',
+      email: 'customer@mncollection.com',
+      role: 'User' as const,
+      status: 'Active' as const,
+      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80'
+    }
+
+    const totalPrice = (product ? product.price : 4000) * ord.quantity
     const newOrder: Order = {
       ...ord,
       id: 'ord_' + Math.random().toString(36).substr(2, 9),
+      userId: effectiveUser.id,
       totalPrice,
       date: new Date().toISOString()
     }
 
     setOrders((prev) => [newOrder, ...prev])
+    try {
+      const stored = localStorage.getItem('mn_orders')
+      const parsedStored: Order[] = stored ? JSON.parse(stored) : []
+      localStorage.setItem('mn_orders', JSON.stringify([newOrder, ...parsedStored]))
+    } catch (e) {
+      console.error(e)
+    }
+
     await supabase.from('orders').insert([
       {
         id: newOrder.id,
@@ -650,8 +686,8 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     ])
 
     // Send Gmail Email Notification to Admin
-    sendAdminOrderNotificationEmail(newOrder, user, product)
-    await addActivity(`📧 Gmail notification sent to mncollection09@gmail.com! Order #${newOrder.id} placed by ${user.name} (${product.name}).`, 'order')
+    sendAdminOrderNotificationEmail(newOrder, effectiveUser, product)
+    await addActivity(`📧 Gmail notification sent to mncollection09@gmail.com! Order #${newOrder.id} placed by ${effectiveUser.name} (${product ? product.name : 'Boutique Suit'}).`, 'order')
   }
 
   const updateOrderStatus = async (id: string, status: Order['status']) => {

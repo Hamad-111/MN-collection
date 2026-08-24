@@ -1223,18 +1223,14 @@ export default function AdminPage() {
                                       </td>
                                       <td className="py-4 px-6 font-medium">
                                         <div className="flex items-center gap-2">
-                                          {user ? (
-                                            <>
-                                              <img
-                                                src={user.avatar}
-                                                alt={user.name}
-                                                className="w-6.5 h-6.5 rounded-full border border-stone-300 bg-stone-100 object-cover shadow-xs"
-                                              />
-                                              <span className="text-stone-900 font-bold">{user.name}</span>
-                                            </>
-                                          ) : (
-                                            <span className="text-stone-400">Deleted Account</span>
-                                          )}
+                                          <img
+                                            src={user?.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80'}
+                                            alt={user?.name || ord.shippingDetails?.name || 'Customer'}
+                                            className="w-6.5 h-6.5 rounded-full border border-stone-300 bg-stone-100 object-cover shadow-xs"
+                                          />
+                                          <span className="text-stone-900 font-bold">
+                                            {user?.name || ord.shippingDetails?.name || 'Customer'}
+                                          </span>
                                         </div>
                                       </td>
                                       <td className="py-4 px-6 font-semibold">
@@ -1569,16 +1565,17 @@ export default function AdminPage() {
                         <h4 className="text-xs font-bold uppercase tracking-wider text-stone-700 font-serif">Customer Details</h4>
                         {(() => {
                           const user = users.find((u) => u.id === selectedOrder.userId)
-                          return user ? (
+                          const name = user?.name || selectedOrder.shippingDetails?.name || 'Customer'
+                          const email = user?.email || 'customer@mncollection.com'
+                          const avatar = user?.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80'
+                          return (
                             <div className="flex items-center gap-3">
-                              <img src={user.avatar} alt={user.name} className="w-10 h-10 rounded-full border border-stone-300 object-cover shadow-xs" />
+                              <img src={avatar} alt={name} className="w-10 h-10 rounded-full border border-stone-300 object-cover shadow-xs" />
                               <div>
-                                <p className="text-stone-900 font-bold text-xs">{user.name}</p>
-                                <p className="text-stone-500 text-[11px] font-medium">{user.email}</p>
+                                <p className="text-stone-900 font-bold text-xs">{name}</p>
+                                <p className="text-stone-500 text-[11px] font-medium">{email}</p>
                               </div>
                             </div>
-                          ) : (
-                            <p className="text-stone-500 text-xs">Deleted customer account</p>
                           )
                         })()}
                       </div>
