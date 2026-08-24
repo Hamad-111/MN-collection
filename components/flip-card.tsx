@@ -26,9 +26,20 @@ export default function FlipCard({
 }: FlipCardProps) {
   const [isFlipped, setIsFlipped] = useState(false)
   const [isFavorite, setIsFavorite] = useState(false)
-  const { products, addToCart } = useStore()
+  const { products, addToCart, openProductLightbox } = useStore()
   const { toast } = useToast()
   
+  const matchedProduct = products.find((p) => p.name === title) || {
+    id: Math.floor(Math.random() * 100000) + 2000,
+    name: title,
+    title: title,
+    price,
+    originalPrice,
+    category: category || 'Premium',
+    description: description || 'Premium quality silk fabric with exquisite craftsmanship and tailored finish.',
+    image: image || '👗',
+  }
+
   // 3D tilt coordinates
   const [rotateX, setRotateX] = useState(0)
   const [rotateY, setRotateY] = useState(0)
@@ -53,20 +64,12 @@ export default function FlipCard({
     setRotateY(0)
   }
 
-  const handleAddToCart = (e: React.MouseEvent) => {
-    e.stopPropagation() // Prevent flip card flip toggles when clicking button
-    
-    const matchedProduct = products.find((p) => p.name === title) || {
-      id: Math.floor(Math.random() * 100000) + 2000,
-      name: title,
-      title: title,
-      price,
-      originalPrice,
-      category: category || 'Premium',
-      description: description || 'Premium quality fabric with exquisite craftsmanship.',
-      image: image || '👗',
-    }
+  const handleCardClick = () => {
+    openProductLightbox(matchedProduct)
+  }
 
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.stopPropagation() // Prevent flip card lightbox trigger when clicking button
     addToCart(matchedProduct)
     
     toast({
@@ -78,6 +81,7 @@ export default function FlipCard({
   return (
     <motion.div
       className="h-80 cursor-pointer"
+      onClick={handleCardClick}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       onMouseEnter={() => setIsFlipped(true)}

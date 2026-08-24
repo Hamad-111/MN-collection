@@ -3,6 +3,7 @@ import { Playfair_Display, Montserrat } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { StoreProvider } from '@/components/store-provider'
 import { Toaster } from '@/components/ui/toaster'
+import ProductLightboxModal from '@/components/product-lightbox-modal'
 import './globals.css'
 
 const playfair = Playfair_Display({
@@ -44,6 +45,7 @@ export default function RootLayout({
       <body className="font-sans antialiased text-foreground bg-background">
         <StoreProvider>
           {children}
+          <ProductLightboxModal />
           <Toaster />
         </StoreProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}

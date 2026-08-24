@@ -50,6 +50,9 @@ interface StoreContextType {
   addActivity: (message: string, type: Activity['type']) => void
   isInitialized: boolean
   refreshStore: () => Promise<void>
+  lightboxProduct: Product | null
+  openProductLightbox: (product: Product) => void
+  closeProductLightbox: () => void
 }
 
 const StoreContext = createContext<StoreContextType | undefined>(undefined)
@@ -63,6 +66,10 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   const [isCartOpen, setIsCartOpen] = useState(false)
   const [currentUser, setCurrentUser] = useState<User | null>(null)
   const [isInitialized, setIsInitialized] = useState(false)
+  const [lightboxProduct, setLightboxProduct] = useState<Product | null>(null)
+
+  const openProductLightbox = (product: Product) => setLightboxProduct(product)
+  const closeProductLightbox = () => setLightboxProduct(null)
   // Load from Supabase on client-side mount (with automatic seeding)
   useEffect(() => {
     const initializeStore = async () => {
@@ -744,7 +751,10 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         deleteOrder,
         addActivity,
         isInitialized,
-        refreshStore
+        refreshStore,
+        lightboxProduct,
+        openProductLightbox,
+        closeProductLightbox
       }}
     >
       {children}

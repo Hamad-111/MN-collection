@@ -22,22 +22,23 @@ export default function ProductCard({
   badge,
 }: ProductCardProps) {
   const [isFavorite, setIsFavorite] = useState(false)
-  const { products, addToCart } = useStore()
+  const { products, addToCart, openProductLightbox } = useStore()
   const { toast } = useToast()
 
-  const handleAddToCart = () => {
-    const matchedProduct = products.find((p) => p.name === name) || {
-      id: Math.floor(Math.random() * 100000) + 1000,
-      name,
-      title: name,
-      price,
-      originalPrice,
-      category: badge || 'Fashion',
-      description: 'Premium quality fabric with exquisite craftsmanship.',
-      badge,
-      image: image || '👗',
-    }
+  const matchedProduct = products.find((p) => p.name === name) || {
+    id: Math.floor(Math.random() * 100000) + 1000,
+    name,
+    title: name,
+    price,
+    originalPrice,
+    category: badge || 'Fashion',
+    description: 'Premium quality oriental silk blend fabric with exquisite craftsmanship and tailored finish.',
+    badge,
+    image: image || '👗',
+  }
 
+  const handleAddToCart = (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation()
     addToCart(matchedProduct)
     
     toast({
@@ -55,6 +56,10 @@ export default function ProductCard({
     })
   }
 
+  const handleOpenLightbox = () => {
+    openProductLightbox(matchedProduct)
+  }
+
   // Calculate discount percentage if original price exists
   const discountPercent = originalPrice && originalPrice > price
     ? Math.round(((originalPrice - price) / originalPrice) * 100)
@@ -62,8 +67,12 @@ export default function ProductCard({
 
   return (
     <div className="group relative rounded-2xl overflow-hidden bg-white border border-stone-200 hover:border-amber-500/40 transition-all duration-500 hover:shadow-xl font-sans flex flex-col justify-between">
-      {/* Top Image Container */}
-      <div className="relative aspect-[3/4] bg-stone-100/70 overflow-hidden flex items-center justify-center">
+      {/* Top Image Container (Clickable for Full Picture View) */}
+      <div 
+        onClick={handleOpenLightbox}
+        className="relative aspect-[3/4] bg-stone-100/70 overflow-hidden flex items-center justify-center cursor-pointer group/img"
+        title="Click to view full picture"
+      >
         {/* Badges Container */}
         <div className="absolute top-3 right-3 flex flex-col gap-1.5 items-end z-20">
           {badge && (
@@ -84,13 +93,20 @@ export default function ProductCard({
             <img
               src={image}
               alt={name}
-              className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-108"
+              className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover/img:scale-108"
             />
           ) : (
-            <div className="w-20 h-20 rounded-full bg-stone-200/80 border border-stone-300 flex items-center justify-center text-3xl shrink-0 group-hover:scale-110 transition-transform duration-500">
+            <div className="w-20 h-20 rounded-full bg-stone-200/80 border border-stone-300 flex items-center justify-center text-3xl shrink-0 group-hover/img:scale-110 transition-transform duration-500">
               {image || '👗'}
             </div>
           )}
+        </div>
+
+        {/* Full View Hover Overlay Hint */}
+        <div className="absolute inset-0 bg-stone-900/30 backdrop-blur-[2px] opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 flex items-center justify-center z-10">
+          <span className="px-3.5 py-2 bg-stone-900/90 text-white rounded-full font-bold text-[10px] uppercase tracking-widest border border-amber-400/40 shadow-lg flex items-center gap-1.5">
+            🔍 Full Picture View
+          </span>
         </div>
 
         {/* Wishlist Heart Button */}
@@ -105,9 +121,6 @@ export default function ProductCard({
             } transition-colors`}
           />
         </button>
-
-        {/* Vignette Overlay on Hover */}
-        <div className="absolute inset-0 bg-gradient-to-t from-stone-900/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
       </div>
 
       {/* Product Content Details */}
