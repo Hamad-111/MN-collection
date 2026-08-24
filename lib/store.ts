@@ -180,6 +180,17 @@ export const defaultProducts: Product[] = [
     image: '/images/cream-suit-frame.png'
   },
   {
+    id: 202,
+    name: 'Ivory Cream Mandarin Silk Shirt (Single Shirt)',
+    title: 'Ivory Cream Mandarin Silk Shirt (Single Shirt)',
+    price: 3500,
+    originalPrice: 4200,
+    category: 'Premium',
+    description: 'Pearl ivory cream silk tunic single shirt with champagne gold piping and mandarin frog-knot closures (Shirt Only).',
+    badge: 'Single Shirt',
+    image: '/images/cream-suit-frame.png'
+  },
+  {
     id: 103,
     name: 'Sage Mint Green Mandarin Silk Set (2-Piece)',
     title: 'Sage Mint Green Mandarin Silk Set (2-Piece)',
@@ -188,6 +199,17 @@ export const defaultProducts: Product[] = [
     category: 'Casual',
     description: 'Pastel sage mint green silk tunic set with white piping, mandarin frog-knot closures, and relaxed wide-leg trousers.',
     badge: 'Popular',
+    image: '/images/mint-suit-frame.png'
+  },
+  {
+    id: 203,
+    name: 'Sage Mint Green Mandarin Silk Shirt (Single Shirt)',
+    title: 'Sage Mint Green Mandarin Silk Shirt (Single Shirt)',
+    price: 3500,
+    originalPrice: 4200,
+    category: 'Casual',
+    description: 'Pastel sage mint green silk tunic single shirt with white piping and mandarin frog-knot closures (Shirt Only).',
+    badge: 'Single Shirt',
     image: '/images/mint-suit-frame.png'
   },
   {
@@ -211,172 +233,6 @@ export const defaultProducts: Product[] = [
     description: 'Dusty rose pinkish-lavender silk single tunic shirt with mandarin frog-knot closures and wide sleeves (Shirt Only).',
     badge: 'Single Shirt',
     image: '/images/lavender-suit-frame.png'
-  },
-  {
-    id: 1,
-    name: 'Silk Elegance Abaya Set',
-    title: 'Silk Elegance Abaya Set',
-    price: 4000,
-    originalPrice: 4800,
-    category: 'Premium',
-    description: 'Luxurious silk blend abaya set with intricate embroidery details',
-    badge: 'New',
-    image: '/images/pink-suit-frame.jpg'
-  },
-  {
-    id: 2,
-    name: 'Royal Blue Formal Suit',
-    title: 'Royal Blue Formal Suit',
-    price: 4000,
-    originalPrice: 4800,
-    category: 'Formal',
-    description: 'Sophisticated formal suit set perfect for special occasions',
-    badge: 'Exclusive',
-    image: '/images/black-suit-frame.png'
-  },
-  {
-    id: 3,
-    name: 'Modern Casual Single Shirt',
-    title: 'Modern Casual Single Shirt',
-    price: 3500,
-    originalPrice: 4200,
-    category: 'Casual',
-    description: 'Contemporary design single shirt with comfortable everyday wear',
-    image: '/images/olive-suit-frame.jpg'
-  },
-  {
-    id: 4,
-    name: 'Golden Border Abaya Set',
-    title: 'Golden Border Abaya Set',
-    price: 4000,
-    originalPrice: 4800,
-    category: 'Premium',
-    description: 'Exquisite abaya set with golden embellishments and details',
-    badge: 'Best Seller',
-    image: '/images/cream-suit-frame.png'
-  },
-  {
-    id: 5,
-    name: 'Pearl White Formal Ensemble',
-    title: 'Pearl White Formal Ensemble',
-    price: 4000,
-    originalPrice: 4800,
-    category: 'Formal',
-    description: 'Elegant pearl-white 2-piece formal ensemble for grand occasions',
-    image: '/images/terracotta-suit-frame.jpg'
-  },
-  {
-    id: 6,
-    name: 'Casual Comfort Single Shirt',
-    title: 'Casual Comfort Single Shirt',
-    price: 3500,
-    originalPrice: 4200,
-    category: 'Casual',
-    description: 'Breathable casual single shirt designed for maximum comfort',
-    image: '/images/mint-suit-frame.png'
-  },
-  {
-    id: 7,
-    name: 'Emerald Luxury Abaya Set',
-    title: 'Emerald Luxury Abaya Set',
-    price: 4000,
-    originalPrice: 4800,
-    category: 'Premium',
-    description: 'Stunning emerald green set with premium fabric quality',
-    image: '/images/olive-suit-frame.jpg'
-  },
-  {
-    id: 8,
-    name: 'Diamond Sparkle Dress Set',
-    title: 'Diamond Sparkle Dress Set',
-    price: 4000,
-    originalPrice: 4800,
-    category: 'Premium',
-    description: 'Sparkling dress set with diamond-cut embellishments',
-    badge: 'Limited',
-    image: '/images/lavender-suit-frame.png'
-  },
-  {
-    id: 9,
-    name: 'Elegant Black Abaya Set',
-    title: 'Elegant Black Abaya Set',
-    price: 4000,
-    originalPrice: 4800,
-    category: 'Premium',
-    description: 'Sleek premium black abaya set with clean traditional lines',
-    badge: 'Classic',
-    image: '/images/black-suit-frame.png'
-  },
-  {
-    id: 10,
-    name: 'Cream Silk Abaya Set',
-    title: 'Cream Silk Abaya Set',
-    price: 4000,
-    originalPrice: 4800,
-    category: 'Premium',
-    description: 'Flowing cream silk abaya set for luxury daytime events',
-    image: '/images/cream-suit-frame.png'
-  },
-  {
-    id: 11,
-    name: 'Embroidered Dynasty Suit Wear',
-    title: 'Embroidered Dynasty Suit Wear',
-    price: 4000,
-    originalPrice: 4800,
-    category: 'Formal',
-    description: 'Artisanally embroidered traditional dress set representing royal heritage',
-    badge: 'Royal',
-    image: '/images/terracotta-suit-frame.jpg'
-  },
-  {
-    id: 12,
-    name: 'Contemporary Formal Suit Set',
-    title: 'Contemporary Formal Suit Set',
-    price: 4000,
-    originalPrice: 4800,
-    category: 'Formal',
-    description: 'Tailored blazer and trousers formal outfit for modern events',
-    image: '/images/pink-suit-frame.jpg'
-  },
-  {
-    id: 13,
-    name: 'Premium Wool Abaya Set',
-    title: 'Premium Wool Abaya Set',
-    price: 4000,
-    originalPrice: 4800,
-    category: 'Premium',
-    description: 'Cozy luxury wool blend abaya set for cooler seasons',
-    image: '/images/lavender-suit-frame.png'
-  },
-  {
-    id: 14,
-    name: 'Summer Light Single Shirt',
-    title: 'Summer Light Single Shirt',
-    price: 3500,
-    originalPrice: 4200,
-    category: 'Casual',
-    description: 'Lightweight, highly breathable summer single shirt',
-    image: '/images/mint-suit-frame.png'
-  },
-  {
-    id: 15,
-    name: 'Golden Embroidery Dress Set',
-    title: 'Golden Embroidery Dress Set',
-    price: 4000,
-    originalPrice: 4800,
-    category: 'Premium',
-    description: 'Stunning gold embroidered formal gown set with high-end fabric',
-    image: '/images/terracotta-suit-frame.jpg'
-  },
-  {
-    id: 16,
-    name: 'Timeless Classic Abaya Set',
-    title: 'Timeless Classic Abaya Set',
-    price: 4000,
-    originalPrice: 4800,
-    category: 'Casual',
-    description: 'Traditional, easy-to-wear everyday black abaya',
-    image: '/images/black-suit-frame.png'
   }
 ]
 

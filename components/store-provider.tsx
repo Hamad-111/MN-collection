@@ -74,33 +74,40 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         // Get active Supabase session
         const { data: { session } } = await supabase.auth.getSession()
 
-        // 1. Load products
+        // 1. Load products and filter duplicates / legacy mismatched entries
         const { data: dbProducts } = await supabase.from('products').select('*')
-        let prepared: Product[] = []
-        if (dbProducts && dbProducts.length > 0) {
-          prepared = dbProducts.map((p) => ({
-            ...p,
-            title: p.name || p.title,
-            price: Number(p.price),
-            originalPrice: p.originalPrice ? Number(p.originalPrice) : undefined
-          }))
-        }
+        const validIds = new Set(defaultProducts.map((p) => Number(p.id)))
+        
+        let prepared: Product[] = defaultProducts
 
-        // Merge any default products missing from DB (e.g. newly added Men Collection items)
-        const dbIds = new Set(prepared.map((p) => Number(p.id)))
-        const missingProducts = defaultProducts.filter((p) => !dbIds.has(Number(p.id)))
-        if (missingProducts.length > 0) {
-          prepared.push(...missingProducts)
-          try {
-            await supabase.from('products').insert(missingProducts)
-          } catch (err) {
-            console.log('Synced default products locally')
+        if (dbProducts && dbProducts.length > 0) {
+          // Filter out legacy duplicate items (IDs 1..16) that had mismatched names
+          const validDbProducts = dbProducts
+            .filter((p) => validIds.has(Number(p.id)))
+            .map((p) => ({
+              ...p,
+              id: Number(p.id),
+              title: p.name || p.title,
+              price: Number(p.price),
+              originalPrice: p.originalPrice ? Number(p.originalPrice) : undefined
+            }))
+
+          if (validDbProducts.length > 0) {
+            // Merge defaults for any missing curated products
+            const existingDbIds = new Set(validDbProducts.map((p) => p.id))
+            const missing = defaultProducts.filter((p) => !existingDbIds.has(p.id))
+            prepared = [...validDbProducts, ...missing]
           }
         }
 
-        // Sort so signature suits (301, 302, 104, 105, 106, 101, 102, 103, 100) are at the top
-        prepared.sort((a, b) => {
-          const priorityIds = [301, 302, 104, 105, 106, 101, 102, 103, 100, 204, 205, 206]
+        // Deduplicate by product ID to eliminate double uploads
+        const uniqueProducts = Array.from(
+          new Map(prepared.map((item) => [item.id, item])).values()
+        )
+
+        // Sort priority signature suits (301, 302, 104, 204, 105, 205, 106, 206, 101, 201, 102, 202, 103, 203, 100, 200)
+        uniqueProducts.sort((a, b) => {
+          const priorityIds = [301, 302, 104, 204, 105, 205, 106, 206, 101, 201, 102, 202, 103, 203, 100, 200]
           const indexA = priorityIds.indexOf(Number(a.id))
           const indexB = priorityIds.indexOf(Number(b.id))
           if (indexA !== -1 && indexB !== -1) return indexA - indexB
@@ -108,7 +115,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
           if (indexB !== -1) return 1
           return Number(a.id) - Number(b.id)
         })
-        setProducts(prepared)
+        setProducts(uniqueProducts)
 
         // 2. Load users
         const { data: dbUsers } = await supabase.from('users').select('*')
@@ -200,15 +207,29 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     const refreshStore = async () => {
       try {
         const { data: dbProducts } = await supabase.from('products').select('*')
+        const validIds = new Set(defaultProducts.map((p) => Number(p.id)))
+        let prepared: Product[] = defaultProducts
+
         if (dbProducts && dbProducts.length > 0) {
-          const prepared = dbProducts.map((p) => ({
-            ...p,
-            title: p.name || p.title,
-            price: Number(p.price),
-            originalPrice: p.originalPrice ? Number(p.originalPrice) : undefined
-          }))
-          setProducts(prepared)
+          const validDbProducts = dbProducts
+            .filter((p) => validIds.has(Number(p.id)))
+            .map((p) => ({
+              ...p,
+              id: Number(p.id),
+              title: p.name || p.title,
+              price: Number(p.price),
+              originalPrice: p.originalPrice ? Number(p.originalPrice) : undefined
+            }))
+          if (validDbProducts.length > 0) {
+            const existingDbIds = new Set(validDbProducts.map((p) => p.id))
+            const missing = defaultProducts.filter((p) => !existingDbIds.has(p.id))
+            prepared = [...validDbProducts, ...missing]
+          }
         }
+        const uniqueProducts = Array.from(
+          new Map(prepared.map((item) => [item.id, item])).values()
+        )
+        setProducts(uniqueProducts)
 
         const { data: dbUsers } = await supabase.from('users').select('*')
         if (dbUsers && dbUsers.length > 0) {
@@ -648,15 +669,29 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   const refreshStore = async () => {
     try {
       const { data: dbProducts } = await supabase.from('products').select('*')
+      const validIds = new Set(defaultProducts.map((p) => Number(p.id)))
+      let prepared: Product[] = defaultProducts
+
       if (dbProducts && dbProducts.length > 0) {
-        const prepared = dbProducts.map((p) => ({
-          ...p,
-          title: p.name || p.title,
-          price: Number(p.price),
-          originalPrice: p.originalPrice ? Number(p.originalPrice) : undefined
-        }))
-        setProducts(prepared)
+        const validDbProducts = dbProducts
+          .filter((p) => validIds.has(Number(p.id)))
+          .map((p) => ({
+            ...p,
+            id: Number(p.id),
+            title: p.name || p.title,
+            price: Number(p.price),
+            originalPrice: p.originalPrice ? Number(p.originalPrice) : undefined
+          }))
+        if (validDbProducts.length > 0) {
+          const existingDbIds = new Set(validDbProducts.map((p) => p.id))
+          const missing = defaultProducts.filter((p) => !existingDbIds.has(p.id))
+          prepared = [...validDbProducts, ...missing]
+        }
       }
+      const uniqueProducts = Array.from(
+        new Map(prepared.map((item) => [item.id, item])).values()
+      )
+      setProducts(uniqueProducts)
 
       const { data: dbUsers } = await supabase.from('users').select('*')
       if (dbUsers && dbUsers.length > 0) {
