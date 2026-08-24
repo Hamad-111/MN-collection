@@ -1,8 +1,8 @@
 import Header from '@/components/header'
 import AnimatedHero from '@/components/animated-hero'
 import PromoBanner from '@/components/promo-banner'
-import CategoryShowcase from '@/components/category-showcase'
 import NewArrivals from '@/components/new-arrivals'
+import MenCollection from '@/components/men-collection'
 import AnimatedProductGrid from '@/components/animated-product-grid'
 import Shop from '@/components/shop'
 import StatsSection from '@/components/stats-section'
@@ -16,8 +16,8 @@ export default function Page() {
       <PromoBanner />
       <Header />
       <AnimatedHero />
-      <CategoryShowcase />
       <NewArrivals />
+      <MenCollection />
       <AnimatedProductGrid />
       <Shop />
       <StatsSection />

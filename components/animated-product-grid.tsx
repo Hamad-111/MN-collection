@@ -1,77 +1,14 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { useState } from 'react'
 import FlipCard from './flip-card'
 import { useScrollAnimation } from '@/hooks/use-scroll-animation'
-
-const products = [
-  {
-    id: 1,
-    title: 'Silk Elegance Abaya',
-    price: 189,
-    originalPrice: 249,
-    category: 'Premium',
-    description: 'Luxurious silk blend abaya with intricate embroidery details',
-  },
-  {
-    id: 2,
-    title: 'Royal Blue Formal',
-    price: 219,
-    originalPrice: 299,
-    category: 'Formal',
-    description: 'Sophisticated formal wear perfect for special occasions',
-  },
-  {
-    id: 3,
-    title: 'Modern Casual Dress',
-    price: 129,
-    originalPrice: 169,
-    category: 'Casual',
-    description: 'Contemporary design with comfortable everyday wear',
-  },
-  {
-    id: 4,
-    title: 'Golden Border Abaya',
-    price: 199,
-    originalPrice: 279,
-    category: 'Premium',
-    description: 'Exquisite abaya with golden embellishments and details',
-  },
-  {
-    id: 5,
-    title: 'Pearl White Ensemble',
-    price: 209,
-    originalPrice: 289,
-    category: 'Formal',
-    description: 'Elegant pearl-white formal ensemble for grand occasions',
-  },
-  {
-    id: 6,
-    title: 'Casual Comfort Wear',
-    price: 119,
-    originalPrice: 159,
-    category: 'Casual',
-    description: 'Breathable casual wear designed for maximum comfort',
-  },
-  {
-    id: 7,
-    title: 'Emerald Luxury',
-    price: 239,
-    originalPrice: 319,
-    category: 'Premium',
-    description: 'Stunning emerald green with premium fabric quality',
-  },
-  {
-    id: 8,
-    title: 'Diamond Sparkle Dress',
-    price: 229,
-    originalPrice: 309,
-    category: 'Premium',
-    description: 'Sparkling dress with diamond-cut embellishments',
-  },
-]
+import { useStore } from '@/components/store-provider'
 
 export default function AnimatedProductGrid() {
+  const { products } = useStore()
+  const [limit, setLimit] = useState(8)
   const { ref, isInView } = useScrollAnimation()
 
   const containerVariants = {
@@ -92,6 +29,8 @@ export default function AnimatedProductGrid() {
       transition: { duration: 0.5 },
     },
   }
+
+  const displayProducts = products.slice(0, limit)
 
   return (
     <section
@@ -119,33 +58,37 @@ export default function AnimatedProductGrid() {
           initial="hidden"
           animate={isInView ? 'visible' : 'hidden'}
         >
-          {products.map((product) => (
+          {displayProducts.map((product) => (
             <motion.div key={product.id} variants={itemVariants}>
               <FlipCard
-                title={product.title}
+                title={product.name}
                 price={product.price}
                 originalPrice={product.originalPrice}
                 category={product.category}
                 description={product.description}
+                image={product.image}
               />
             </motion.div>
           ))}
         </motion.div>
 
-        <motion.div
-          className="flex justify-center mt-16"
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-        >
-          <motion.button
-            whileHover={{ scale: 1.02, y: -2 }}
-            whileTap={{ scale: 0.98 }}
-            className="px-10 py-4 bg-primary text-primary-foreground font-semibold font-sans rounded-lg text-xs uppercase tracking-widest shadow-xl shadow-primary/10 transition-all"
+        {limit < products.length && (
+          <motion.div
+            className="flex justify-center mt-16"
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            transition={{ duration: 0.8, delay: 0.5 }}
           >
-            Load More Products
-          </motion.button>
-        </motion.div>
+            <motion.button
+              onClick={() => setLimit((prev) => prev + 4)}
+              whileHover={{ scale: 1.02, y: -2 }}
+              whileTap={{ scale: 0.98 }}
+              className="px-10 py-4 bg-primary text-primary-foreground font-semibold font-sans rounded-lg text-xs uppercase tracking-widest shadow-xl shadow-primary/10 transition-all cursor-pointer"
+            >
+              Load More Products
+            </motion.button>
+          </motion.div>
+        )}
       </div>
     </section>
   )

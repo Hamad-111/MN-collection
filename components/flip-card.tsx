@@ -3,6 +3,9 @@
 import { motion } from 'framer-motion'
 import { useState } from 'react'
 import { Heart, ShoppingCart } from 'lucide-react'
+import { useStore } from './store-provider'
+import { useToast } from '@/hooks/use-toast'
+import { formatPrice } from '@/lib/utils'
 
 interface FlipCardProps {
   title: string
@@ -23,6 +26,8 @@ export default function FlipCard({
 }: FlipCardProps) {
   const [isFlipped, setIsFlipped] = useState(false)
   const [isFavorite, setIsFavorite] = useState(false)
+  const { products, addToCart } = useStore()
+  const { toast } = useToast()
   
   // 3D tilt coordinates
   const [rotateX, setRotateX] = useState(0)
@@ -46,6 +51,28 @@ export default function FlipCard({
     setIsFlipped(false)
     setRotateX(0)
     setRotateY(0)
+  }
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.stopPropagation() // Prevent flip card flip toggles when clicking button
+    
+    const matchedProduct = products.find((p) => p.name === title) || {
+      id: Math.floor(Math.random() * 100000) + 2000,
+      name: title,
+      title: title,
+      price,
+      originalPrice,
+      category: category || 'Premium',
+      description: description || 'Premium quality fabric with exquisite craftsmanship.',
+      image: image || '👗',
+    }
+
+    addToCart(matchedProduct)
+    
+    toast({
+      title: 'Added to Cart! 🛒',
+      description: `${title} has been added to your shopping cart.`,
+    })
   }
 
   return (
@@ -82,29 +109,38 @@ export default function FlipCard({
             <motion.button
               onClick={(e) => {
                 e.stopPropagation()
-                setIsFavorite(!isFavorite)
+                const newFavorite = !isFavorite
+                setIsFavorite(newFavorite)
+                toast({
+                  title: newFavorite ? 'Added to Wishlist! ❤️' : 'Removed from Wishlist 🤍',
+                  description: `${title} has been ${newFavorite ? 'added to' : 'removed from'} your wishlist.`,
+                })
               }}
               whileHover={{ scale: 1.15 }}
               whileTap={{ scale: 0.9 }}
-              className="text-lg"
+              className="text-lg cursor-pointer"
             >
               {isFavorite ? '❤️' : '🤍'}
             </motion.button>
           </div>
 
-          <div className="flex-1 flex items-center justify-center">
-            <div className="w-24 h-24 bg-gradient-to-br from-secondary/15 to-primary/5 rounded-2xl flex items-center justify-center text-4xl shadow-inner shadow-secondary/5 border border-border/40">
-              👗
-            </div>
+          <div className="flex-1 flex items-center justify-center py-2 overflow-hidden">
+            {image?.startsWith('data:') || image?.startsWith('http') || image?.startsWith('/') ? (
+              <img src={image} alt={title} className="w-full h-36 object-cover rounded-xl border border-border/40 shadow-sm" />
+            ) : (
+              <div className="w-24 h-24 bg-gradient-to-br from-secondary/15 to-primary/5 rounded-2xl flex items-center justify-center text-4xl shadow-inner shadow-secondary/5 border border-border/40">
+                {image || '👗'}
+              </div>
+            )}
           </div>
 
           <div>
             <h3 className="text-lg font-semibold font-serif text-foreground mb-1 line-clamp-1">{title}</h3>
             <div className="flex items-baseline gap-2">
-              <span className="text-xl font-bold text-primary">${price}</span>
+              <span className="text-xl font-bold text-primary">{formatPrice(price)}</span>
               {originalPrice && (
                 <span className="text-xs text-muted-foreground line-through">
-                  ${originalPrice}
+                  {formatPrice(originalPrice)}
                 </span>
               )}
             </div>
@@ -128,9 +164,10 @@ export default function FlipCard({
           </div>
 
           <motion.button
+            onClick={handleAddToCart}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="w-full py-3 bg-background text-foreground font-semibold font-sans rounded-lg text-xs uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-muted shadow-lg transition-colors"
+            className="w-full py-3 bg-background text-foreground font-semibold font-sans rounded-lg text-xs uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-muted shadow-lg transition-colors cursor-pointer"
           >
             <ShoppingCart size={14} />
             Add to Cart

@@ -5,23 +5,23 @@ import { ArrowRight } from 'lucide-react'
 
 const categories = [
   {
-    name: 'Abayas',
-    description: 'Traditional elegance',
-    icon: '👗',
+    name: "Men's Collection",
+    description: 'Bamboo print silk shirts & suits',
+    icon: '👔',
   },
   {
-    name: 'Formal Wear',
-    description: 'Sophisticated styles',
+    name: 'Mandarin Silk Sets',
+    description: 'Signature 2-piece ensembles',
     icon: '✨',
   },
   {
-    name: 'Casual Collection',
-    description: 'Comfortable luxury',
+    name: 'Casual Luxury',
+    description: 'Comfortable tunic shirts',
     icon: '🌸',
   },
   {
-    name: 'Accessories',
-    description: 'Complete your look',
+    name: 'Premium Wear',
+    description: 'Exclusive handcrafted fashion',
     icon: '💎',
   },
 ]

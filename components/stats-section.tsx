@@ -12,10 +12,10 @@ interface Stat {
 }
 
 const stats: Stat[] = [
-  { label: 'Happy Customers', value: 50000, suffix: '+', icon: '👥' },
-  { label: 'Products Designed', value: 1200, suffix: '+', icon: '👗' },
-  { label: 'Years Experience', value: 8, suffix: '+', icon: '⭐' },
-  { label: 'Countries Served', value: 45, suffix: '+', icon: '🌍' },
+  { label: 'Satisfied Boutique Clients', value: 50000, suffix: '+', icon: '👥' },
+  { label: 'Exquisite Designs', value: 1200, suffix: '+', icon: '👗' },
+  { label: 'Years of Haute Couture', value: 12, suffix: '+', icon: '👑' },
+  { label: 'Global Cities Served', value: 45, suffix: '+', icon: '🌍' },
 ]
 
 function AnimatedCounter({ target, duration = 2 }: { target: number; duration?: number }) {
@@ -41,7 +41,7 @@ function AnimatedCounter({ target, duration = 2 }: { target: number; duration?: 
     return () => cancelAnimationFrame(animationFrameId)
   }, [target, duration])
 
-  return <span>{count}</span>
+  return <span>{count.toLocaleString()}</span>
 }
 
 export default function StatsSection() {
@@ -52,16 +52,16 @@ export default function StatsSection() {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.2,
+        staggerChildren: 0.15,
       },
     },
   }
 
   const itemVariants = {
-    hidden: { opacity: 0, scale: 0.5 },
+    hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
-      scale: 1,
+      y: 0,
       transition: { duration: 0.6 },
     },
   }
@@ -69,25 +69,28 @@ export default function StatsSection() {
   return (
     <section
       ref={ref}
-      className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-background via-accent/5 to-background border-t border-b border-border/30"
+      className="py-24 px-4 sm:px-6 lg:px-8 bg-[#fbf9f5] border-t border-stone-200 font-sans text-stone-900 relative overflow-hidden"
     >
       <div className="max-w-7xl mx-auto">
         <motion.div
-          className="text-center mb-16"
+          className="text-center mb-16 space-y-3"
           initial={{ opacity: 0, y: -20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: -20 }}
           transition={{ duration: 0.8 }}
         >
-          <h2 className="text-4xl sm:text-5xl font-bold font-serif text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-primary mb-4">
+          <span className="text-[10px] font-bold text-amber-900 uppercase tracking-widest px-3.5 py-1.5 rounded-full bg-amber-100 border border-amber-300">
+            ✨ Boutique Distinction
+          </span>
+          <h2 className="text-4xl sm:text-5xl font-bold font-serif gold-gradient-text">
             Our Achievements
           </h2>
-          <p className="text-muted-foreground text-lg">
-            Trusted by thousands of customers worldwide
+          <p className="text-stone-600 text-base max-w-lg mx-auto font-normal">
+            Crafting royal elegance and delivering satisfaction across the globe
           </p>
         </motion.div>
 
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
           variants={containerVariants}
           initial="hidden"
           animate={isInView ? 'visible' : 'hidden'}
@@ -96,25 +99,18 @@ export default function StatsSection() {
             <motion.div
               key={index}
               variants={itemVariants}
-              className="group relative"
+              className="p-8 rounded-2xl bg-white border border-stone-200 hover:border-amber-500/40 transition-all duration-300 hover:-translate-y-1 text-center space-y-3 shadow-xs"
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-secondary/10 to-primary/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              <div className="relative bg-card backdrop-blur-xl rounded-2xl p-8 border border-border/80 group-hover:border-secondary/40 group-hover:shadow-xl transition-all duration-500 text-center">
-                <motion.div
-                  className="text-5xl mb-4"
-                  animate={{ y: [0, -10, 0] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                >
-                  {stat.icon}
-                </motion.div>
-                <div className="text-4xl sm:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-primary mb-2">
-                  {isInView && <AnimatedCounter target={stat.value} />}
-                  {stat.suffix}
-                </div>
-                <p className="text-muted-foreground text-base font-medium font-sans uppercase tracking-wider">
-                  {stat.label}
-                </p>
+              <div className="w-14 h-14 mx-auto rounded-full bg-amber-50 border border-amber-200 flex items-center justify-center text-2xl">
+                {stat.icon}
               </div>
+              <div className="text-3xl sm:text-4xl font-extrabold font-serif gold-gradient-text">
+                {isInView ? <AnimatedCounter target={stat.value} /> : '0'}
+                <span>{stat.suffix}</span>
+              </div>
+              <p className="text-stone-600 text-xs uppercase tracking-wider font-bold">
+                {stat.label}
+              </p>
             </motion.div>
           ))}
         </motion.div>

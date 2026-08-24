@@ -1,32 +1,13 @@
-import ProductCard from './product-card'
+'use client'
 
-const newArrivals = [
-  {
-    name: 'Luxe Evening Abaya',
-    price: 249.99,
-    originalPrice: 299.99,
-    badge: 'New',
-  },
-  {
-    name: 'Premium Silk Ensemble',
-    price: 189.99,
-    originalPrice: 229.99,
-    badge: 'New',
-  },
-  {
-    name: 'Royal Heritage Collection',
-    price: 319.99,
-    originalPrice: 399.99,
-    badge: 'Hot Deal',
-  },
-  {
-    name: 'Modern Modest Wear',
-    price: 159.99,
-    badge: 'New',
-  },
-]
+import ProductCard from './product-card'
+import { useStore } from './store-provider'
 
 export default function NewArrivals() {
+  const { products } = useStore()
+  // Render top products featuring the 4 Oriental Mandarin Silk Suits
+  const arrivalProducts = products.slice(0, 4)
+
   return (
     <section id="new-arrivals" className="py-20 bg-gradient-to-b from-background via-accent/5 to-background border-t border-border/30 scroll-mt-28">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -36,14 +17,21 @@ export default function NewArrivals() {
             New Arrivals
           </h2>
           <p className="text-lg text-muted-foreground font-sans max-w-2xl mx-auto">
-            Luxury Modest Fashion Articles
+            Oriental Mandarin Collection — Signature Silk Suits
           </p>
         </div>
 
         {/* Product Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {newArrivals.map((product) => (
-            <ProductCard key={product.name} {...product} />
+          {arrivalProducts.map((product) => (
+            <ProductCard
+              key={product.id}
+              name={product.name}
+              price={product.price}
+              originalPrice={product.originalPrice}
+              badge={product.badge}
+              image={product.image}
+            />
           ))}
         </div>
       </div>

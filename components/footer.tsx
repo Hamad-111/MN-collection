@@ -1,180 +1,202 @@
 'use client'
 
 import Link from 'next/link'
-import { Facebook, Instagram, Twitter, Mail } from 'lucide-react'
+import { Facebook, Instagram, Twitter, Mail, Send, ShieldCheck, Banknote, Truck } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { useState } from 'react'
+import { useToast } from '@/hooks/use-toast'
 
 export default function Footer() {
+  const [email, setEmail] = useState('')
+  const { toast } = useToast()
+
+  const handleSubscribe = (e: React.FormEvent) => {
+    e.preventDefault()
+    
+    if (!email) {
+      toast({
+        title: 'Error ❌',
+        description: 'Please enter an email address to subscribe.',
+        variant: 'destructive',
+      })
+      return
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      toast({
+        title: 'Invalid Email ❌',
+        description: 'Please provide a valid email format (e.g. user@example.com).',
+        variant: 'destructive',
+      })
+      return
+    }
+
+    toast({
+      title: 'Subscribed Successfully! ✉️',
+      description: `Thank you! ${email} has been subscribed to our boutique newsletter.`,
+    })
+    setEmail('')
+  }
+
+  const handleSimulatedLink = (label: string) => {
+    toast({
+      title: 'Navigation Info 🌐',
+      description: `"${label}" section is ready in the live boutique catalog.`,
+    })
+  }
+
   return (
-    <footer className="bg-gradient-to-b from-background to-accent/10 text-foreground relative overflow-hidden border-t border-border/50">
-      {/* Animated background elements */}
-      <div className="absolute inset-0 opacity-5">
-        <motion.div
-          className="absolute top-0 -left-40 w-80 h-80 bg-secondary rounded-full blur-3xl"
-          animate={{ y: [0, 20, 0], x: [0, 10, 0] }}
-          transition={{ duration: 8, repeat: Infinity }}
-        />
-        <motion.div
-          className="absolute bottom-0 -right-40 w-80 h-80 bg-primary rounded-full blur-3xl"
-          animate={{ y: [0, -20, 0], x: [0, -10, 0] }}
-          transition={{ duration: 8, repeat: Infinity }}
-        />
-      </div>
+    <footer className="bg-[#f5f1eb] text-stone-800 relative overflow-hidden border-t border-stone-300 font-sans">
+      {/* Background ambient lighting */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-amber-500/10 rounded-full filter blur-[120px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10">
         {/* Main Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
           {/* Brand */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
+            className="space-y-4"
           >
-            <div className="flex flex-col items-start gap-2 mb-4">
+            <div className="flex items-center gap-3">
               <img
                 src="/logo.png"
-                alt="MN logo"
-                style={{ height: '90px', width: 'auto' }}
-                className="object-contain"
+                alt="MN Collection"
+                className="h-12 w-auto object-contain drop-shadow-xs"
               />
-              <h3 className="text-base font-bold font-serif tracking-[0.25em] text-foreground uppercase mt-2">
+              <h3 className="text-lg font-bold font-serif tracking-[0.2em] gold-gradient-text uppercase">
                 MN Collection
               </h3>
             </div>
-            <p className="text-muted-foreground text-sm mb-4 leading-relaxed font-sans font-light">
-              Premium clothing and traditional wear for the modern, sophisticated you.
+            <p className="text-stone-600 text-xs leading-relaxed font-normal">
+              Royal oriental fashion, handcrafted silk suits, and luxury couture tailored for timeless elegance.
             </p>
-            <div className="flex gap-4">
-              <motion.a
-                href="#"
-                whileHover={{ scale: 1.15, color: '#c29f62' }}
-                className="hover:text-secondary transition text-primary"
+            <div className="flex items-center gap-3 pt-2">
+              <a
+                href="https://www.facebook.com/mncollection_09"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Facebook @mncollection_09"
+                className="w-9 h-9 rounded-full bg-white border border-stone-300 flex items-center justify-center text-amber-800 hover:text-amber-600 hover:border-amber-400 hover:scale-110 transition-all cursor-pointer shadow-xs"
               >
-                <Facebook className="w-5 h-5" />
-              </motion.a>
-              <motion.a
-                href="#"
-                whileHover={{ scale: 1.15, color: '#c29f62' }}
-                className="hover:text-secondary transition text-primary"
+                <Facebook className="w-4 h-4" />
+              </a>
+              <a
+                href="https://www.instagram.com/mncollection_09"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Instagram @mncollection_09"
+                className="w-9 h-9 rounded-full bg-white border border-stone-300 flex items-center justify-center text-amber-800 hover:text-amber-600 hover:border-amber-400 hover:scale-110 transition-all cursor-pointer shadow-xs"
               >
-                <Instagram className="w-5 h-5" />
-              </motion.a>
-              <motion.a
-                href="#"
-                whileHover={{ scale: 1.15, color: '#c29f62' }}
-                className="hover:text-secondary transition text-primary"
+                <Instagram className="w-4 h-4" />
+              </a>
+              <a
+                href="https://x.com/mncollection_09"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Twitter / X @mncollection_09"
+                className="w-9 h-9 rounded-full bg-white border border-stone-300 flex items-center justify-center text-amber-800 hover:text-amber-600 hover:border-amber-400 hover:scale-110 transition-all cursor-pointer shadow-xs"
               >
-                <Twitter className="w-5 h-5" />
-              </motion.a>
-              <motion.a
-                href="#"
-                whileHover={{ scale: 1.15, color: '#c29f62' }}
-                className="hover:text-secondary transition text-primary"
+                <Twitter className="w-4 h-4" />
+              </a>
+              <a
+                href="https://mail.google.com/mail/?view=cm&fs=1&to=mncollection09@gmail.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Gmail mncollection09@gmail.com"
+                className="w-9 h-9 rounded-full bg-white border border-stone-300 flex items-center justify-center text-amber-800 hover:text-amber-600 hover:border-amber-400 hover:scale-110 transition-all cursor-pointer shadow-xs"
               >
-                <Mail className="w-5 h-5" />
-              </motion.a>
+                <Mail className="w-4 h-4" />
+              </a>
             </div>
           </motion.div>
 
-          {/* Shop */}
-          <div>
-            <h4 className="font-serif font-semibold text-base uppercase tracking-wider mb-4 text-foreground">Shop</h4>
-            <ul className="space-y-2 text-muted-foreground text-sm font-sans font-light">
+          {/* Boutique Navigation */}
+          <div className="space-y-4">
+            <h4 className="font-serif font-bold text-sm uppercase tracking-wider text-amber-900">Collections</h4>
+            <ul className="space-y-2.5 text-stone-600 text-xs font-medium">
               <li>
-                <Link href="#" className="hover:text-secondary transition">
-                  Abayas
-                </Link>
+                <a href="#new-arrivals" className="hover:text-amber-800 transition cursor-pointer">
+                  New Arrivals 2026
+                </a>
               </li>
               <li>
-                <Link href="#" className="hover:text-secondary transition">
-                  Formal Wear
-                </Link>
+                <a href="#men-collection" className="hover:text-amber-800 transition cursor-pointer">
+                  Men's Royal Collection
+                </a>
               </li>
               <li>
-                <Link href="#" className="hover:text-secondary transition">
-                  Casual Collection
-                </Link>
+                <a href="#shop" className="hover:text-amber-800 transition cursor-pointer">
+                  Oriental Abayas & Dresses
+                </a>
               </li>
               <li>
-                <Link href="#" className="hover:text-secondary transition">
-                  Accessories
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:text-secondary transition font-semibold text-secondary">
-                  Sale
-                </Link>
+                <button onClick={() => handleSimulatedLink('Accessories')} className="hover:text-amber-800 transition cursor-pointer text-left">
+                  Handcrafted Accessories
+                </button>
               </li>
             </ul>
           </div>
 
-          {/* Customer Service */}
-          <div>
-            <h4 className="font-serif font-semibold text-base uppercase tracking-wider mb-4 text-foreground">Customer Service</h4>
-            <ul className="space-y-2 text-muted-foreground text-sm font-sans font-light">
-              <li>
-                <Link href="#" className="hover:text-secondary transition">
-                  Contact Us
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:text-secondary transition">
-                  Shipping Info
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:text-secondary transition">
-                  Returns
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:text-secondary transition">
-                  FAQ
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:text-secondary transition">
-                  Size Guide
-                </Link>
-              </li>
-            </ul>
+          {/* Customer Service & COD */}
+          <div className="space-y-4">
+            <h4 className="font-serif font-bold text-sm uppercase tracking-wider text-amber-900">Service & Delivery</h4>
+            <div className="space-y-2.5 text-xs text-stone-600 font-medium">
+              <div className="flex items-center gap-2 text-stone-800">
+                <Truck className="w-4 h-4 text-amber-700" /> Free Courier Delivery
+              </div>
+              <div className="flex items-center gap-2 text-emerald-800 font-bold">
+                <Banknote className="w-4 h-4 text-emerald-600" /> Cash on Delivery (COD)
+              </div>
+              <div className="flex items-center gap-2 text-stone-800">
+                <ShieldCheck className="w-4 h-4 text-amber-700" /> 100% Authentic Quality
+              </div>
+            </div>
           </div>
 
-          {/* Newsletter */}
-          <div>
-            <h4 className="font-serif font-semibold text-base uppercase tracking-wider mb-4 text-foreground">Newsletter</h4>
-            <p className="text-muted-foreground text-sm mb-4 leading-relaxed font-sans font-light">
-              Subscribe for exclusive offers and new arrivals.
+          {/* Newsletter Subscription */}
+          <div className="space-y-4">
+            <h4 className="font-serif font-bold text-sm uppercase tracking-wider text-amber-900">VIP Newsletter</h4>
+            <p className="text-stone-600 text-xs font-normal leading-relaxed">
+              Subscribe for private boutique previews, VIP fashion drops, and special offers.
             </p>
-            <div className="flex">
+            <form onSubmit={handleSubscribe} className="flex gap-2">
               <input
                 type="email"
-                placeholder="Your email"
-                className="flex-1 px-4 py-2 rounded-l-lg bg-card border border-border text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-1 focus:ring-secondary/30 text-sm font-sans"
+                placeholder="Enter email address..."
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="flex-1 px-3.5 py-2.5 rounded-xl bg-white border border-stone-300 text-stone-900 placeholder-stone-400 focus:outline-none focus:border-amber-600 text-xs shadow-xs"
               />
-              <button className="px-4 py-2 rounded-r-lg bg-primary hover:bg-primary/90 text-primary-foreground font-semibold font-sans text-xs uppercase tracking-widest transition-colors">
-                Sign Up
+              <button
+                type="submit"
+                className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-700 via-amber-600 to-yellow-600 hover:from-amber-600 hover:to-yellow-500 text-white font-bold text-xs uppercase tracking-wider transition-colors cursor-pointer shrink-0 shadow-xs"
+              >
+                Join
               </button>
-            </div>
+            </form>
           </div>
         </div>
 
         {/* Divider */}
-        <div className="border-t border-border/60 my-8"></div>
+        <div className="border-t border-stone-300 my-8" />
 
         {/* Bottom Footer */}
-        <div className="flex flex-col md:flex-row justify-between items-center text-muted-foreground text-xs font-sans font-light">
-          <p>&copy; 2024 MN Collection. All rights reserved.</p>
-          <div className="flex gap-6 mt-4 md:mt-0">
-            <Link href="#" className="hover:text-secondary transition">
+        <div className="flex flex-col md:flex-row justify-between items-center text-stone-600 text-xs font-normal gap-4">
+          <p>&copy; 2026 MN Collection Boutique. All rights reserved.</p>
+          <div className="flex items-center gap-6">
+            <button onClick={() => handleSimulatedLink('Privacy Policy')} className="hover:text-stone-900 transition cursor-pointer">
               Privacy Policy
-            </Link>
-            <Link href="#" className="hover:text-secondary transition">
+            </button>
+            <button onClick={() => handleSimulatedLink('Terms of Service')} className="hover:text-stone-900 transition cursor-pointer">
               Terms of Service
-            </Link>
-            <Link href="#" className="hover:text-secondary transition">
-              Cookie Policy
-            </Link>
+            </button>
+            <button onClick={() => handleSimulatedLink('Cash on Delivery Terms')} className="hover:text-stone-900 transition cursor-pointer">
+              COD Terms
+            </button>
           </div>
         </div>
       </div>

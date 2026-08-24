@@ -1,44 +1,47 @@
-import { Truck, Shield, Undo2, Star } from 'lucide-react'
+import { Truck, ShieldCheck, Undo2, Banknote, Sparkles } from 'lucide-react'
 
 const features = [
   {
     icon: Truck,
-    title: 'Free Shipping',
-    description: 'On orders over $100 worldwide',
+    title: 'Pakistan Courier Express Delivery',
+    description: 'Free doorstep shipping across Karachi, Lahore, Islamabad & all Pakistan cities',
   },
   {
-    icon: Shield,
-    title: 'Secure Payment',
-    description: 'Safe and encrypted transactions',
+    icon: Banknote,
+    title: 'Cash on Delivery (COD)',
+    description: 'Pay cash to TCS / Leopards / Trax courier driver upon arrival at your doorstep',
   },
   {
-    icon: Undo2,
-    title: 'Easy Returns',
-    description: '30-day return policy guaranteed',
+    icon: ShieldCheck,
+    title: '100% Authentic Quality',
+    description: 'Verified pure silk & hand-crafted oriental fabrics with doorstep inspection',
   },
   {
-    icon: Star,
-    title: 'Premium Quality',
-    description: 'Luxury materials and craftsmanship',
+    icon: Sparkles,
+    title: 'Royal Festive Couture',
+    description: 'Tailored with hand-embroidered velvet, silk-linen & oriental mandarin collars',
   },
 ]
 
 export default function Features() {
   return (
-    <section className="py-16 md:py-20 bg-background border-b border-border/30">
+    <section className="py-20 bg-[#faf7f2] border-t border-stone-200 font-sans text-stone-900 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {features.map((feature) => {
             const Icon = feature.icon
             return (
-              <div key={feature.title} className="text-center">
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-secondary/10 mb-4 border border-secondary/20">
-                  <Icon className="w-6 h-6 text-primary" />
+              <div
+                key={feature.title}
+                className="p-6 rounded-2xl bg-white border border-stone-200 hover:border-amber-500/40 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl group text-center space-y-3"
+              >
+                <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-amber-100 border border-amber-200 text-amber-800 group-hover:scale-110 transition-transform duration-300">
+                  <Icon className="w-6 h-6 stroke-[2]" />
                 </div>
-                <h3 className="text-lg font-semibold font-serif text-foreground mb-2">
+                <h3 className="text-base font-bold font-serif text-stone-900 group-hover:text-amber-800 transition-colors">
                   {feature.title}
                 </h3>
-                <p className="text-muted-foreground text-sm font-sans">
+                <p className="text-stone-600 text-xs font-normal leading-relaxed">
                   {feature.description}
                 </p>
               </div>

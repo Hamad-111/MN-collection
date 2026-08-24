@@ -1,35 +1,28 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { Sparkles, Truck, ShieldCheck, Banknote } from 'lucide-react'
 
 export default function PromoBanner() {
   return (
-    <section className="relative bg-gradient-to-r from-black via-yellow-900/40 to-black backdrop-blur-sm py-4 text-center border-b border-yellow-600/30 overflow-hidden">
-      {/* Animated background elements */}
-      <motion.div
-        className="absolute inset-0 opacity-20"
-        animate={{ backgroundPosition: ['0% 0%', '100% 100%'] }}
-        transition={{ duration: 20, repeat: Infinity }}
-        style={{
-          backgroundImage:
-            'linear-gradient(45deg, #1f1f1f 0%, #ca8a04 50%, #b45309 100%)',
-          backgroundSize: '200% 200%',
-        }}
-      />
+    <div className="relative bg-gradient-to-r from-[#fef3c7] via-[#fef08a] to-[#fef3c7] border-b border-amber-200 py-2 px-4 text-center overflow-hidden font-sans z-50 shadow-xs">
+      <div className="max-w-7xl mx-auto flex items-center justify-center gap-4 text-[11px] sm:text-xs font-semibold text-stone-800 tracking-wider">
+        <span className="hidden md:flex items-center gap-1 text-amber-900 font-extrabold uppercase tracking-widest text-[10px]">
+          <Sparkles className="w-3.5 h-3.5 text-amber-700" /> EID ROYAL COLLECTION 2026 PAKISTAN
+        </span>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <motion.p
-          className="text-white/90 font-semibold text-sm sm:text-base"
-          animate={{ y: [0, -10, 0] }}
-          transition={{ duration: 3, repeat: Infinity }}
-        >
-          🎁 <span className="text-yellow-400">Free Shipping</span> on orders over $100 |{' '}
-          <span className="text-yellow-300">
-            Exclusive Offers
-          </span>{' '}
-          for Newsletter Members ✨
-        </motion.p>
+        <span className="hidden md:inline text-amber-300">•</span>
+
+        <span className="flex items-center gap-1.5 font-semibold text-stone-800">
+          <Truck className="w-3.5 h-3.5 text-amber-700" /> Free Courier Express Delivery Nationwide Pakistan
+        </span>
+
+        <span className="text-amber-300">•</span>
+
+        <span className="flex items-center gap-1.5 font-bold text-emerald-800">
+          <Banknote className="w-3.5 h-3.5 text-emerald-600" /> 💵 Cash on Delivery (COD) Across Pakistan
+        </span>
       </div>
-    </section>
+    </div>
   )
 }

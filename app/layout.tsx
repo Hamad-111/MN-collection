@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import { Playfair_Display, Montserrat } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { StoreProvider } from '@/components/store-provider'
+import { Toaster } from '@/components/ui/toaster'
 import './globals.css'
 
 const playfair = Playfair_Display({
@@ -14,25 +16,21 @@ const montserrat = Montserrat({
 })
 
 export const metadata: Metadata = {
-  title: 'MN Collection | Premium Cloth & Fashion',
-  description: 'Discover premium clothing and traditional wear at MN Collection. Exclusive designs with royal elegance.',
+  title: 'MN Collection | Royal Oriental & Luxury Festive Fashion Pakistan',
+  description: "Pakistan's premier boutique for oriental silk abayas, mandarin suits, and luxury festive couture. Cash on Delivery (COD) available across Karachi, Lahore, Islamabad & nationwide.",
   generator: 'v0.app',
   icons: {
     icon: [
       {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
+        url: '/logo.png',
+        type: 'image/png',
       },
       {
         url: '/icon.svg',
         type: 'image/svg+xml',
       },
     ],
-    apple: '/apple-icon.png',
+    apple: '/logo.png',
   },
 }
 
@@ -44,7 +42,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${playfair.variable} ${montserrat.variable} bg-background`}>
       <body className="font-sans antialiased text-foreground bg-background">
-        {children}
+        <StoreProvider>
+          {children}
+          <Toaster />
+        </StoreProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>
